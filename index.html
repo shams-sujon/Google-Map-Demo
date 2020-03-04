@@ -52,13 +52,17 @@
     </div>
 
     <script>
+        var map;
+
         function initMap() {
             var myLatLng = {
                 lat: -25.363,
                 lng: 131.044
             };
 
-            var map = new google.maps.Map(document.getElementById('map'), {
+
+
+            map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 4,
                 center: myLatLng
             });
@@ -68,6 +72,35 @@
                 map: map,
                 title: 'Hello World!'
             });
+
+        }
+
+        var dhakaLatLng = {
+            lat: 23.777176,
+            lng: 90.399452
+        };
+
+        document.getElementById("addMarker").addEventListener("click", myFunction);
+
+        function myFunction() {
+            var bounds = new google.maps.LatLngBounds();
+            bounds.extend(dhakaLatLng);
+            map.fitBounds(bounds);
+            zoomChangeBoundsListener =
+                google.maps.event.addListenerOnce(map, 'bounds_changed', function (event) {
+                    if (this.getZoom()) {
+                        window.alert("the zoom is  "+this.zoom) // or set a minimum
+                        this.setZoom(8); // set zoom here
+                    }
+                });
+
+            setTimeout(function () {
+                google.maps.event.removeListener(zoomChangeBoundsListener)
+            }, 500);
+            var markerToAdd = new google.maps.Marker({
+                position: dhakaLatLng,
+                map: map,
+            })
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-ILRTlV8Gd-GvTXEP1oUQej4Q9ZDhe1k&callback=initMap"
